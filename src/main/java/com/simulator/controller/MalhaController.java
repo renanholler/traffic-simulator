@@ -12,26 +12,11 @@ import javafx.stage.Stage;
 
 public class MalhaController {
 
-    private Malha malha;
-    private MalhaView view;
+    private final Malha malha;
     private final int CELL_SIZE = 30;
 
     public MalhaController(Malha malha) {
         this.malha = malha;
-    }
-
-    public Malha getMalha() {
-        return malha;
-    }
-
-    public void setMalha(Malha malha) {
-        this.malha = malha;
-    }
-
-    public void init(Stage stage) {
-        GridPane gridPane = UtilFactory.createGridPane();
-        this.inicializaGridPane(gridPane);
-        this.view.start(stage, gridPane);
     }
 
     public void inicializaGridPane(GridPane gridPane) {

@@ -61,7 +61,7 @@ public class SimuladorTrafego extends Application implements Observer {
         // Adicionar controles
         root.setTop(createControlPanel());
 
-        Scene scene = new Scene(root, 800, 850);
+        Scene scene = new Scene(root, 1200, 850);
         stage.setTitle("Simulador de Tráfego");
         stage.setScene(scene);
         stage.show();

@@ -20,9 +20,8 @@ public class TrafficSimulator extends Application {
         GridLoader loader = new GridLoader();
 
         try {
-            int[][] grid = loader.loadGridFromFile("/malhas/malha-exemplo-3.txt");
+            int[][] grid = loader.loadGridFromFile("/malhas/malha-exemplo-2.txt");
             double cellSize = 30;
-            Color[][] colorGrid = new Color[grid.length][grid[0].length]; // Para manter as cores atribuídas
 
             // Adiciona números nas colunas (0 a n-1)
             for (int col = 0; col < grid[0].length; col++) {
@@ -37,30 +36,17 @@ public class TrafficSimulator extends Application {
                 gridPane.add(rowLabel, 0, row + 1); // Ajusta para ter espaço acima
             }
 
-            // Percorre o grid para identificar estradas e cruzamentos
+            // Preenche a malha com as cores corretas para cada célula
             for (int i = 0; i < grid.length; i++) {
                 for (int j = 0; j < grid[i].length; j++) {
-                    if (isRoad(grid[i][j])) {
-                        // Se a estrada começa em uma borda ou sai de um cruzamento
-                        Color roadColor = getColorForDirection(grid[i][j]);
-                        propagateRoad(grid, colorGrid, i, j, roadColor, grid[i][j]); // Passa a cor e direção inicial
-                    } else if (isCrossroad(grid[i][j])) {
-                        // Pinta cruzamento de cinza claro
-                        colorGrid[i][j] = Color.LIGHTGRAY;
-                    } else if (grid[i][j] == 0) {
-                        // Espaço vazio (0) é pintado de branco
-                        colorGrid[i][j] = Color.WHITE;
-                    }
-                }
-            }
-
-            // Preenche o GridPane com as cores atribuídas
-            for (int i = 0; i < grid.length; i++) {
-                for (int j = 0; j < grid[0].length; j++) {
                     Rectangle rect = new Rectangle(cellSize, cellSize);
                     rect.setStroke(Color.BLACK);
-                    rect.setFill(colorGrid[i][j]);
-                    gridPane.add(rect, j + 1, i + 1); // Adiciona a célula no grid
+
+                    // Define a cor de acordo com o valor da célula
+                    rect.setFill(getColorForCell(grid[i][j]));
+
+                    // Adiciona a célula colorida ao grid
+                    gridPane.add(rect, j + 1, i + 1);
                 }
             }
 
@@ -78,65 +64,18 @@ public class TrafficSimulator extends Application {
         primaryStage.show();
     }
 
-    // Método para propagar a estrada, mantendo a cor até o próximo cruzamento, sem mudar em curvas
-    private void propagateRoad(int[][] grid, Color[][] colorGrid, int i, int j, Color roadColor, int currentDirection) {
-        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || colorGrid[i][j] != null) {
-            return; // Se fora dos limites ou já pintado, saímos
+    // Método para determinar a cor de uma célula com base no valor
+    private Color getColorForCell(int cellValue) {
+        switch (cellValue) {
+            case 0: return Color.WHITE;        // Espaço vazio
+            case 1: return Color.LIGHTBLUE;    // Estrada Cima
+            case 2: return Color.LIGHTGREEN;   // Estrada Direita
+            case 3: return Color.GRAY;         // Estrada Baixo
+            case 4: return Color.LIGHTCORAL;   // Estrada Esquerda
+            case 5: return Color.LIGHTGRAY;    // Cruzamento
+            // Se houver outros tipos de cruzamento, você pode adicionar mais casos aqui
+            default: return Color.LIGHTGRAY;   // Outros tipos desconhecidos
         }
-
-        if (isCrossroad(grid[i][j])) {
-            colorGrid[i][j] = Color.LIGHTGRAY; // Pinta o cruzamento de cinza claro
-            return; // Após o cruzamento, a propagação para
-        }
-
-        if (!isRoad(grid[i][j])) {
-            return; // Se não for estrada, saímos
-        }
-
-        // Mantém a cor inicial da estrada até o cruzamento
-        colorGrid[i][j] = roadColor;
-
-        // Propaga nas direções possíveis, mantendo a cor até o próximo cruzamento
-        // Movimentos verticais (cima e baixo)
-        if (currentDirection == 1 || currentDirection == 3) {
-            if (i + 1 < grid.length && (grid[i + 1][j] == currentDirection || isCrossroad(grid[i + 1][j]))) {
-                propagateRoad(grid, colorGrid, i + 1, j, roadColor, currentDirection); // baixo
-            }
-            if (i - 1 >= 0 && (grid[i - 1][j] == currentDirection || isCrossroad(grid[i - 1][j]))) {
-                propagateRoad(grid, colorGrid, i - 1, j, roadColor, currentDirection); // cima
-            }
-        }
-
-        // Movimentos horizontais (direita e esquerda)
-        if (currentDirection == 2 || currentDirection == 4) {
-            if (j + 1 < grid[0].length && (grid[i][j + 1] == currentDirection || isCrossroad(grid[i][j + 1]))) {
-                propagateRoad(grid, colorGrid, i, j + 1, roadColor, currentDirection); // direita
-            }
-            if (j - 1 >= 0 && (grid[i][j - 1] == currentDirection || isCrossroad(grid[i][j - 1]))) {
-                propagateRoad(grid, colorGrid, i, j - 1, roadColor, currentDirection); // esquerda
-            }
-        }
-    }
-
-    // Método para determinar a cor com base na direção inicial da estrada
-    private Color getColorForDirection(int direction) {
-        switch (direction) {
-            case 1: return Color.LIGHTBLUE;   // Estrada Cima
-            case 2: return Color.LIGHTGREEN;  // Estrada Direita
-            case 3: return Color.GRAY;        // Estrada Baixo
-            case 4: return Color.LIGHTCORAL;  // Estrada Esquerda
-            default: return Color.WHITE;      // Caso não seja estrada
-        }
-    }
-
-    // Método para verificar se a célula é parte de uma estrada
-    private boolean isRoad(int cell) {
-        return cell >= 1 && cell <= 4; // Estradas são representadas pelos valores de 1 a 4
-    }
-
-    // Método para verificar se a célula é um cruzamento
-    private boolean isCrossroad(int cell) {
-        return cell >= 5 && cell <= 12; // Cruzamentos são representados pelos valores de 5 a 12
     }
 
     public static void main(String[] args) {

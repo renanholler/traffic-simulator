@@ -40,7 +40,6 @@ public class SimuladorTrafego extends Application implements Observer {
     private int quantidadeVeiculos;
     private long intervaloInsercao;
 
-
     @Override
     public void start(Stage stage) throws Exception {
         veiculoShapes = new HashMap<>();
@@ -48,7 +47,7 @@ public class SimuladorTrafego extends Application implements Observer {
         BorderPane root = new BorderPane();
         gridPane = new GridPane();
 
-        try{
+        try {
             malha = GridLoader.loadGridFromFile("/malhas/malha-exemplo-2.txt");
             MalhaController malhaController = new MalhaController(malha);
             malhaController.inicializaGridPane(gridPane);
@@ -103,7 +102,7 @@ public class SimuladorTrafego extends Application implements Observer {
                 syncStrategy = new MonitorStrategy();
             }
 
-            controller = new SimuladorController(malha, syncStrategy);
+            controller = new SimuladorController(malha, syncStrategy, this);
 
             controller.iniciarSimulacao(quantidadeVeiculos, intervaloInsercao);
         });

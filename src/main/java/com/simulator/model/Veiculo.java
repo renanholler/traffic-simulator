@@ -89,13 +89,13 @@ public class Veiculo implements Runnable, Subject {
     private int[] calcularProximaPosicao() {
         // Implementar lógica para determinar a próxima posição
         // Exemplo simples: mover para a direita
-        return new int[]{posicaoX + 1, posicaoY};
+        return new int[]{posicaoX, posicaoY - 1};
     }
 
     private boolean chegouAoDestino() {
         // Implementar lógica para verificar se o veículo chegou ao destino
         // Exemplo: se estiver na borda direita da malha
-        return posicaoX >= malha.getLenX() - 1;
+        return posicaoX >= malha.getLenX() + 1 || posicaoY <= malha.getLenY() - 1;
     }
 
     public int getPosicaoX() {

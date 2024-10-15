@@ -1,5 +1,6 @@
 package com.simulator.controller;
 
+import com.simulator.SimuladorTrafego;
 import com.simulator.model.Malha;
 import com.simulator.model.Veiculo;
 import com.simulator.util.Factory.VeiculoFactory;
@@ -16,18 +17,20 @@ public class SimuladorController {
     private final List<Veiculo> veiculosAtivos;
     private final SyncStrategy syncStrategy;
     private boolean insercaoAtiva = true;
+    private SimuladorTrafego simuladorTrafego;
 
-    public SimuladorController(Malha malha, SyncStrategy syncStrategy) {
+    public SimuladorController(Malha malha, SyncStrategy syncStrategy, SimuladorTrafego simuladorTrafego) {
         this.malha = malha;
         this.veiculosAtivos = new ArrayList<>();
         this.syncStrategy = syncStrategy;
+        this.simuladorTrafego = simuladorTrafego;
     }
 
     public void iniciarSimulacao(int quantidadeVeiculos, long intervaloInsercao) {
         new Thread(() -> {
             while(insercaoAtiva) {
                 if(veiculosAtivos.size() < quantidadeVeiculos) {
-                    Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy);
+                    Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy, simuladorTrafego);
                     veiculosAtivos.add(veiculo);
                     new Thread(veiculo).start();
                 }

@@ -132,9 +132,6 @@ public class Veiculo implements Runnable, Subject {
         // Adicionar posição inicial
         trajeto.add(new int[]{x, y});
 
-        // Obter a célula atual
-        Celula celulaAtual = malha.getCelula(x, y);
-
         // Calcular próxima posição
         int nextX = x + deltaX(direcaoDesejada);
         int nextY = y + deltaY(direcaoDesejada);
@@ -200,92 +197,6 @@ public class Veiculo implements Runnable, Subject {
             default:
                 return 0;
         }
-    }
-
-
-    private int[] calcularProximaPosicao() {
-        int nextX = posicaoX;
-        int nextY = posicaoY;
-
-        // Calcular a próxima posição com base na direção atual
-        switch (direcaoAtual) {
-            case UP:
-                nextY -= 1;
-                break;
-            case DOWN:
-                nextY += 1;
-                break;
-            case LEFT:
-                nextX -= 1;
-                break;
-            case RIGHT:
-                nextX += 1;
-                break;
-        }
-
-        // Verificar limites da malha
-        if (nextX < 0 || nextX >= malha.getLenX() || nextY < 0 || nextY >= malha.getLenY()) {
-            return null;
-        }
-
-        Celula proximaCelula = malha.getCelula(nextX, nextY);
-
-        if (proximaCelula == null || proximaCelula.getDirecoesPermitidas().isEmpty()) {
-            return null;
-        }
-
-        // Se a próxima célula for um cruzamento, decidir nova direção antes de entrar
-        if (proximaCelula.isCruzamento()) {
-            decidirDirecaoNoCruzamento(proximaCelula);
-            // Recalcular a próxima posição com a nova direção
-            nextX = posicaoX;
-            nextY = posicaoY;
-            switch (direcaoAtual) {
-                case UP:
-                    nextY -= 1;
-                    break;
-                case DOWN:
-                    nextY += 1;
-                    break;
-                case LEFT:
-                    nextX -= 1;
-                    break;
-                case RIGHT:
-                    nextX += 1;
-                    break;
-            }
-
-            // Verificar limites novamente
-            if (nextX < 0 || nextX >= malha.getLenX() || nextY < 0 || nextY >= malha.getLenY()) {
-                return null;
-            }
-
-            proximaCelula = malha.getCelula(nextX, nextY);
-
-            if (proximaCelula == null || !proximaCelula.getDirecoesPermitidas().contains(direcaoAtual)) {
-                return null;
-            }
-        } else {
-            // Verificar se a próxima célula permite a direção atual
-            if (!proximaCelula.getDirecoesPermitidas().contains(direcaoAtual)) {
-                return null;
-            }
-        }
-
-        return new int[]{nextX, nextY};
-    }
-
-    private void decidirDirecaoNoCruzamento(Celula celulaCruzamento) {
-        Set<Direction> direcoesPossiveis = new HashSet<>(celulaCruzamento.getDirecoesPermitidas());
-        // Remover a direção oposta para evitar retorno
-        direcoesPossiveis.remove(getDirecaoOposta(direcaoAtual));
-
-        if (!direcoesPossiveis.isEmpty()) {
-            List<Direction> direcoes = new ArrayList<>(direcoesPossiveis);
-            Random rand = new Random();
-            direcaoAtual = direcoes.get(rand.nextInt(direcoes.size()));
-        }
-        // Caso contrário, mantém a direção atual
     }
 
     private Direction getDirecaoOposta(Direction dir) {

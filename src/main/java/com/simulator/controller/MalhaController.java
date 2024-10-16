@@ -1,14 +1,11 @@
 package com.simulator.controller;
 
-import com.simulator.util.Factory.UtilFactory;
 import com.simulator.model.Malha;
-import com.simulator.view.MalhaView;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 public class MalhaController {
 
@@ -50,15 +47,15 @@ public class MalhaController {
 
     // Método para determinar a cor de uma célula com base no valor
     private Color getColorForCell(int cellValue) {
-        switch (cellValue) {
-            case 0: return Color.WHITE;        // Espaço vazio
-            case 1: return Color.LIGHTBLUE;    // Estrada Cima
-            case 2: return Color.LIGHTGREEN;   // Estrada Direita
-            case 3: return Color.GRAY;         // Estrada Baixo
-            case 4: return Color.LIGHTCORAL;   // Estrada Esquerda
-            case 5: return Color.LIGHTGRAY;    // Cruzamento
+        return switch (cellValue) {
+            case 0 -> Color.WHITE;        // Espaço vazio
+            case 1 -> Color.LIGHTBLUE;    // Estrada Cima
+            case 2 -> Color.LIGHTGREEN;   // Estrada Direita
+            case 3 -> Color.GRAY;         // Estrada Baixo
+            case 4 -> Color.LIGHTCORAL;   // Estrada Esquerda
+            case 5 -> Color.LIGHTGRAY;    // Cruzamento
             // Se houver outros tipos de cruzamento, você pode adicionar mais casos aqui
-            default: return Color.LIGHTGRAY;   // Outros tipos desconhecidos
-        }
+            default -> Color.LIGHTGRAY;   // Outros tipos desconhecidos
+        };
     }
 }

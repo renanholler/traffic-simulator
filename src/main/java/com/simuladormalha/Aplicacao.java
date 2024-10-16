@@ -24,7 +24,7 @@ public class Aplicacao {
             ControllerSimulacao controlador = new ControllerSimulacao(malha, exclusaoMutua);
 
             // Iniciar a simulação com 10 veículos e intervalo de inserção de 1 segundo
-            controlador.iniciarSimulacao(2, 1000);
+            controlador.iniciarSimulacao(5, 1000);
 
             // Encerrar a inserção após 30 segundos
             Thread.sleep(30000);

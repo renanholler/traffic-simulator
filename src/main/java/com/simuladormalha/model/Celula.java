@@ -8,10 +8,12 @@ public class Celula {
     private boolean ocupada;
     private boolean reservada;
 
-    public Celula(int tipo) {
+    public Celula(int tipo, int linha, int coluna) {
         this.tipo = tipo;
         this.ocupada = false;
         this.reservada = false;
+        this.linha = linha;
+        this.coluna = coluna;
     }
 
     public synchronized boolean estaOcupada() {
@@ -38,15 +40,8 @@ public class Celula {
         return linha;
     }
 
-    public void setLinha(int linha) {
-        this.linha = linha;
-    }
-
     public int getColuna() {
         return coluna;
     }
 
-    public void setColuna(int coluna) {
-        this.coluna = coluna;
-    }
 }

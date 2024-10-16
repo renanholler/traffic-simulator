@@ -28,7 +28,7 @@ public class MalhaViaria {
             String[] valores = br.readLine().trim().split("\\s+");
             for (int j = 0; j < colunas; j++) {
                 int tipo = Integer.parseInt(valores[j]);
-                malha[i][j] = new Celula(tipo);
+                malha[i][j] = new Celula(tipo, i, j);
             }
         }
         br.close();

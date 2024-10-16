@@ -1,7 +1,6 @@
 package com.simuladormalha.model;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,23 +34,61 @@ public class MalhaViaria {
         br.close();
     }
 
-    private void identificarPontosEntradaSaida() {
+    public void identificarPontosEntradaSaida() {
         pontosEntrada = new ArrayList<>();
         pontosSaida = new ArrayList<>();
 
-        for (int i = 0; i < linhas; i++) {
-            if (malha[i][0].getTipo() != 0)
-                pontosEntrada.add(new int[]{i, 0});
-            if (malha[i][colunas - 1].getTipo() != 0)
-                pontosSaida.add(new int[]{i, colunas - 1});
+        for (int i = 0; i < colunas; i++) {
+            for (int j = 0; j < linhas; j++) {
+                if (ehPontoEntrada(getLado(i, j), malha[i][j].getTipo())) {
+                    pontosEntrada.add(new int[]{i, j});
+                } else if(ehPontoSaida(getLado(i,j), malha[i][j].getTipo())) {
+                    pontosSaida.add(new int[]{i,j});
+                }
+            }
         }
+    }
 
-        for (int j = 0; j < colunas; j++) {
-            if (malha[0][j].getTipo() != 0)
-                pontosEntrada.add(new int[]{0, j});
-            if (malha[linhas - 1][j].getTipo() != 0)
-                pontosSaida.add(new int[]{linhas - 1, j});
+    public int getLado(int x, int y) {
+        if (x == colunas - 1) {
+            return 2;
         }
+        if (x == 0) {
+            return 4;
+        }
+        if (y == linhas - 1) {
+            return 3;
+        }
+        if (y == 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private boolean ehPontoEntrada(int lado, int tipoCelula) {
+        if (lado == 1 && tipoCelula == 2) {
+            return true;
+        }
+        if (lado == 2 && tipoCelula == 1) {
+            return true;
+        }
+        if (lado == 3 && tipoCelula == 4) {
+            return true;
+        }
+        return lado == 4 && tipoCelula == 3;
+    }
+
+    private boolean ehPontoSaida(int lado, int tipoCelula) {
+        if (lado == 1 && tipoCelula == 4) {
+            return true;
+        }
+        if (lado == 2 && tipoCelula == 3) {
+            return true;
+        }
+        if (lado == 3 && tipoCelula == 2) {
+            return true;
+        }
+        return lado == 4 && tipoCelula == 1;
     }
 
     public Celula[][] getMalha() {

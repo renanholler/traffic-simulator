@@ -35,10 +35,10 @@ public class ControllerSimulacao {
             while (insercaoAtiva) {
                 if (veiculos.size() < maxVeiculos) {
                     Veiculo veiculo = veiculoFactory.criarVeiculo();
-                    if(malha.getMalha()[veiculo.getColunaAtual()][veiculo.getLinhaAtual()].estaOcupada()) {
+                    if(malha.getMalha()[veiculo.getLinhaAtual()][veiculo.getColunaAtual()].estaOcupada()) {
                         continue;
                     } else {
-                        malha.getMalha()[veiculo.getColunaAtual()][veiculo.getLinhaAtual()].setOcupada(true);
+                        malha.getMalha()[veiculo.getLinhaAtual()][veiculo.getColunaAtual()].setOcupada(true);
                     }
                     veiculos.add(veiculo);
                     veiculo.start();

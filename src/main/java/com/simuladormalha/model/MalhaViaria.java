@@ -10,8 +10,8 @@ public class MalhaViaria {
     private Celula[][] malha;
     private int linhas;
     private int colunas;
-    private List<int[]> pontosEntrada;
-    private List<int[]> pontosSaida;
+    private List<Celula> pontosEntrada;
+    private List<Celula> pontosSaida;
 
     public MalhaViaria(String caminhoArquivo) throws Exception {
         carregarMalha(caminhoArquivo);
@@ -41,9 +41,9 @@ public class MalhaViaria {
         for (int i = 0; i < colunas; i++) {
             for (int j = 0; j < linhas; j++) {
                 if (ehPontoEntrada(getLado(i, j), malha[i][j].getTipo())) {
-                    pontosEntrada.add(new int[]{i, j});
+                    pontosEntrada.add(malha[i][j]);
                 } else if(ehPontoSaida(getLado(i,j), malha[i][j].getTipo())) {
-                    pontosSaida.add(new int[]{i,j});
+                    pontosSaida.add(malha[i][j]);
                 }
             }
         }
@@ -95,11 +95,11 @@ public class MalhaViaria {
         return malha;
     }
 
-    public List<int[]> getPontosEntrada() {
+    public List<Celula> getPontosEntrada() {
         return pontosEntrada;
     }
 
-    public List<int[]> getPontosSaida() {
+    public List<Celula> getPontosSaida() {
         return pontosSaida;
     }
 

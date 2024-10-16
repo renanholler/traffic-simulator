@@ -1,6 +1,5 @@
 package com.simuladormalha.model;
 
-
 import com.simuladormalha.util.strategy.ExclusaoMutuaStrategy;
 
 import java.util.ArrayList;
@@ -106,6 +105,10 @@ public class Veiculo extends Thread {
     private void moverVeiculo(List<Celula> caminho) {
         malha.getMalha()[linhaAtual][colunaAtual].setOcupada(false);
         for (Celula celula : caminho) {
+            if(!malha.getPontosSaida().contains(malha.getMalha()[linhaAtual][colunaAtual])) {
+                desativar();
+                return;
+            }
             linhaAtual = celula.getLinha();
             colunaAtual = celula.getColuna();
             celula.setOcupada(true);

@@ -1,5 +1,6 @@
 package com.simuladormalha.util.factory;
 
+import com.simuladormalha.model.Celula;
 import com.simuladormalha.model.MalhaViaria;
 import com.simuladormalha.model.Veiculo;
 import com.simuladormalha.util.strategy.ExclusaoMutuaStrategy;
@@ -19,10 +20,10 @@ public class VeiculoFactory {
     }
 
     public Veiculo criarVeiculo() {
-        List<int[]> entradas = malha.getPontosEntrada();
-        int[] entrada = entradas.get(random.nextInt(entradas.size()));
+        List<Celula> entradas = malha.getPontosEntrada();
+        Celula entrada = entradas.get(random.nextInt(entradas.size()));
         int velocidade = 50 + random.nextInt(100);
 
-        return new Veiculo(malha, entrada[0], entrada[1], velocidade, exclusaoMutua);
+        return new Veiculo(malha, entrada.getLinha(), entrada.getColuna(), velocidade, exclusaoMutua);
     }
 }

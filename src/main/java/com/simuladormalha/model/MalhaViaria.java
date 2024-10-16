@@ -91,6 +91,10 @@ public class MalhaViaria {
         return lado == 4 && tipoCelula == 1;
     }
 
+    public Celula getCelula(int linha, int coluna) {
+        return malha[linha][coluna];
+    }
+
     public Celula[][] getMalha() {
         return malha;
     }

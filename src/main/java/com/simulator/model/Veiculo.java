@@ -1,6 +1,7 @@
 package com.simulator.model;
 
 import com.simulator.util.Observer.Observer;
+import com.simulator.util.Observer.ObserverRemove;
 import com.simulator.util.Observer.Subject;
 import com.simulator.util.Strategy.SyncStrategy;
 
@@ -15,6 +16,8 @@ public class Veiculo implements Runnable, Subject {
     private SyncStrategy syncStrategy;
     private boolean running = true;
     private List<Observer> observers;
+    private List<ObserverRemove> observersRemove;
+
     private Direction direcaoAtual;
 
     public Veiculo(int velocidade, Malha malha, SyncStrategy syncStrategy, int startX, int startY) {
@@ -24,6 +27,7 @@ public class Veiculo implements Runnable, Subject {
         this.malha = malha;
         this.syncStrategy = syncStrategy;
         this.observers = new ArrayList<>();
+        this.observersRemove = new ArrayList<>();
         this.direcaoAtual = determinarDirecaoInicial();
     }
 
@@ -37,6 +41,15 @@ public class Veiculo implements Runnable, Subject {
                 Thread.currentThread().interrupt();
             }
         }
+
+        notifyObservers();
+    }
+
+    public void parar() {
+        running = false;
+        Thread.currentThread().interrupt();
+        notifyObserversRemove();
+        notifyObservers();
     }
 
     private Direction determinarDirecaoInicial() {
@@ -57,8 +70,10 @@ public class Veiculo implements Runnable, Subject {
     private void mover() throws InterruptedException {
         // Verificar se chegou ao destino
         if (chegouAoDestino()) {
+            System.out.println("Chegou ao destino");
             running = false;
             liberarCelulaAtual();
+            notifyObserversRemove();
             notifyObservers();
             return;
         }
@@ -157,8 +172,6 @@ public class Veiculo implements Runnable, Subject {
         return trajeto;
     }
 
-
-
     private Direction decidirDirecao() {
         Celula celulaAtual = malha.getCelula(posicaoX, posicaoY);
         Set<Direction> direcoesPossiveis = new HashSet<>(celulaAtual.getDirecoesPermitidas());
@@ -223,22 +236,32 @@ public class Veiculo implements Runnable, Subject {
         syncStrategy.release(new Celula[]{celulaAtual});
     }
 
-    // Métodos do padrão Observer (registraObserver, removeObserver, notifyObservers)
-
     @Override
-    public void registraObserver(Observer o) {
+    public synchronized void registraObserver(Observer o) {
         this.observers.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public synchronized void removeObserver(Observer o) {
         this.observers.remove(o);
     }
 
     @Override
-    public void notifyObservers() {
+    public synchronized void notifyObservers() {
         for (Observer o : observers) {
             o.update(this);
+        }
+    }
+
+    @Override
+    public synchronized void registraObserverRemove(ObserverRemove or) {
+        this.observersRemove.add(or);
+    }
+
+    @Override
+    public synchronized void notifyObserversRemove() {
+        for (ObserverRemove o : observersRemove) {
+            o.remove(this);
         }
     }
 

@@ -5,6 +5,7 @@ import com.simulator.model.Malha;
 import com.simulator.model.Veiculo;
 import com.simulator.util.Factory.VeiculoFactory;
 import com.simulator.util.GridLoader;
+import com.simulator.util.Observer.ObserverRemove;
 import com.simulator.util.Strategy.SyncStrategy;
 import com.simulator.view.MalhaView;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimuladorController {
+public class SimuladorController implements ObserverRemove {
     private final Malha malha;
     private final List<Veiculo> veiculosAtivos;
     private final SyncStrategy syncStrategy;
@@ -32,6 +33,7 @@ public class SimuladorController {
                 if(veiculosAtivos.size() < quantidadeVeiculos) {
                     Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy);
                     veiculo.registraObserver(simuladorTrafego);
+                    veiculo.registraObserverRemove(this);
                     veiculosAtivos.add(veiculo);
                     new Thread(veiculo).start();
                 }
@@ -50,12 +52,17 @@ public class SimuladorController {
 
     public void encerrarSimulacao() {
         insercaoAtiva = false;
+        List<Veiculo> veiculos = veiculosAtivos;
         for (Veiculo veiculo : veiculosAtivos) {
-
-            // Interrompe a thread do veículo
-            // Aqui, você pode implementar um método para parar o veículo adequadamente
+            System.out.println("tentar parar");
+            veiculo.parar();
         }
         veiculosAtivos.clear();
     }
 
+
+    @Override
+    public void remove(Veiculo veiculo) {
+        this.veiculosAtivos.remove(veiculo);
+    }
 }

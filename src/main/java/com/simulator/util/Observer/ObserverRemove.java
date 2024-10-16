@@ -2,7 +2,7 @@ package com.simulator.util.Observer;
 
 import com.simulator.model.Veiculo;
 
-public interface Observer {
+public interface ObserverRemove {
 
-    void update(Veiculo veiculo);
+    void remove(Veiculo veiculo);
 }

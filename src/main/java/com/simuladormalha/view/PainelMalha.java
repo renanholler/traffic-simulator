@@ -11,6 +11,8 @@ public class PainelMalha extends JPanel {
 
     public PainelMalha(MalhaViaria malha) {
         this.malha = malha;
+
+        setPreferredSize(new Dimension(700, 800));
     }
 
     @Override

@@ -54,15 +54,36 @@ public class Veiculo extends Thread {
         List<int[]> movimentosPossiveis = new ArrayList<>();
         Random random = new Random();
 
-        // Exemplo simplificado: movimento aleatório para cima, baixo, esquerda ou direita
-        if (linhaAtual > 0)
-            movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
-        if (linhaAtual < malha.getLinhas() - 1)
-            movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
-        if (colunaAtual > 0)
-            movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
-        if (colunaAtual < malha.getColunas() - 1)
-            movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
+        switch (tipo) {
+            case 1, 5:
+                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
+                break;
+            case 2, 6:
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
+                break;
+            case 3, 7:
+                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
+                break;
+            case 4, 8:
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
+                break;
+            case 9:
+                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
+                break;
+            case 10:
+                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
+                break;
+            case 11:
+                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
+                break;
+            case 12:
+                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
+                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
+                break;
+        }
 
         if (movimentosPossiveis.isEmpty())
             return null;
@@ -95,4 +116,13 @@ public class Veiculo extends Thread {
         ativo = false;
         interrupt();
     }
+
+    public int getLinhaAtual() {
+        return linhaAtual;
+    }
+
+    public int getColunaAtual() {
+        return colunaAtual;
+    }
+
 }

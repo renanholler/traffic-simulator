@@ -14,7 +14,7 @@ public class InterfaceGrafica extends JFrame {
         painelMalha = new PainelMalha(malha);
 
         setTitle("Simulação de Veículos");
-        setSize(800, 600);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         add(painelMalha);

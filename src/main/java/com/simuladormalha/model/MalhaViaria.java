@@ -2,8 +2,10 @@ package com.simuladormalha.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MalhaViaria {
     private Celula[][] malha;
@@ -18,9 +20,9 @@ public class MalhaViaria {
     }
 
     private void carregarMalha(String caminhoArquivo) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo));
-        linhas = Integer.parseInt(br.readLine());
-        colunas = Integer.parseInt(br.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(caminhoArquivo))));
+        linhas = Integer.parseInt(br.readLine().trim());
+        colunas = Integer.parseInt(br.readLine().trim());
         malha = new Celula[linhas][colunas];
 
         for (int i = 0; i < linhas; i++) {

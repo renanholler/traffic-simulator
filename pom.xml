@@ -39,7 +39,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.simulator.SimuladorTrafego</mainClass>
+                    <mainClass>com.simulator2.SimuladorTrafego</mainClass>
                 </configuration>
             </plugin>
         </plugins>

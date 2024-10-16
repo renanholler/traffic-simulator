@@ -42,7 +42,7 @@ public class Veiculo implements Runnable, Subject {
             }
         }
 
-        notifyObservers();
+        parar();
     }
 
     public void parar() {
@@ -57,7 +57,7 @@ public class Veiculo implements Runnable, Subject {
         Set<Direction> direcoesPermitidas = celulaAtual.getDirecoesPermitidas();
         if (direcoesPermitidas.isEmpty()) {
             // Não há direções permitidas; encerrar veículo
-            running = false;
+            parar();
             return null;
         } else {
             // Escolher aleatoriamente uma das direções permitidas
@@ -71,10 +71,8 @@ public class Veiculo implements Runnable, Subject {
         // Verificar se chegou ao destino
         if (chegouAoDestino()) {
             System.out.println("Chegou ao destino");
-            running = false;
+            parar();
             liberarCelulaAtual();
-            notifyObserversRemove();
-            notifyObservers();
             return;
         }
 
@@ -92,9 +90,8 @@ public class Veiculo implements Runnable, Subject {
             // Verificar se a posição está dentro dos limites
             if (x < 0 || x >= malha.getLenX() || y < 0 || y >= malha.getLenY()) {
                 // Trajeto inválido; encerrar o veículo
-                running = false;
+                parar();
                 liberarCelulaAtual();
-                notifyObservers();
                 return;
             }
             Celula celula = malha.getCelula(x, y);

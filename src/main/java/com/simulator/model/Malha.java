@@ -19,8 +19,8 @@ public class Malha {
     }
 
     private void initGrid() {
-        for(int i = 0; i < this.lenX; i++) {
-            for(int j = 0; j < this.lenY; j++) {
+        for (int i = 0; i < this.lenX; i++) {
+            for (int j = 0; j < this.lenY; j++) {
                 this.grid[i][j] = ModelFactory.createCelula();
             }
         }
@@ -61,10 +61,10 @@ public class Malha {
 
     public List<int[]> getPontosEntrada() {
         List<int[]> pontosEntrada = new ArrayList<>();
-        for(int i = 0; i < lenX; i++) {
-            for(int j = 0; j < lenY; j++) {
-                if(ehPontoEntrada(getLado(i,j), getCelula(i,j).getTipo())) {
-                    pontosEntrada.add(new int[]{i,j});
+        for (int i = 0; i < lenX; i++) {
+            for (int j = 0; j < lenY; j++) {
+                if (ehPontoEntrada(getLado(i, j), getCelula(i, j).getTipo())) {
+                    pontosEntrada.add(new int[]{i, j});
                 }
             }
         }
@@ -72,21 +72,20 @@ public class Malha {
     }
 
     public int getLado(int x, int y) {
-        if(x == 0) {
+        if (x == 0) {
             return 1;
         }
-        if(x == lenX - 1) {
+        if (x == lenX - 1) {
             return 3;
         }
-        if(y == 0) {
+        if (y == 0) {
             return 2;
         }
-        if(y == lenY - 1) {
+        if (y == lenY - 1) {
             return 4;
         }
         return 0;
     }
-
 
     private boolean ehPontoEntrada(int lado, int tipoCelula) {
         if (lado == 1 && tipoCelula == 2) {
@@ -101,4 +100,11 @@ public class Malha {
         return lado == 4 && tipoCelula == 1;
     }
 
+    public boolean isPontoSaida(int x, int y) {
+        // Ponto de saída é a borda oposta ao ponto de entrada
+        // Verifica se a célula está na borda e não é um ponto de entrada
+        int lado = getLado(x, y);
+        int tipoCelula = getCelula(x, y).getTipo();
+        return (lado != 0 && !ehPontoEntrada(lado, tipoCelula));
+    }
 }

@@ -30,7 +30,7 @@ public class SimuladorController {
         new Thread(() -> {
             while(insercaoAtiva) {
                 if(veiculosAtivos.size() < quantidadeVeiculos) {
-                    Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy, simuladorTrafego);
+                    Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy);
                     veiculo.registraObserver(simuladorTrafego);
                     veiculosAtivos.add(veiculo);
                     new Thread(veiculo).start();
@@ -57,17 +57,5 @@ public class SimuladorController {
         }
         veiculosAtivos.clear();
     }
-
-//    public void start(Stage stage) {
-//        try {
-//            Malha malha = GridLoader.loadGridFromFile(filePath);
-//            MalhaView view = new MalhaView();
-//            MalhaController malhaController = new MalhaController(malha, view);
-//            malhaController.init(stage);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }

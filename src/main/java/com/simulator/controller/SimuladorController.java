@@ -34,6 +34,7 @@ public class SimuladorController implements ObserverRemove {
                     Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy);
                     veiculo.registraObserver(simuladorTrafego);
                     veiculo.registraObserverRemove(this);
+                    veiculo.registraObserverRemove(simuladorTrafego);
                     veiculosAtivos.add(veiculo);
                     new Thread(veiculo).start();
                 }
@@ -52,12 +53,10 @@ public class SimuladorController implements ObserverRemove {
 
     public void encerrarSimulacao() {
         insercaoAtiva = false;
-        List<Veiculo> veiculos = veiculosAtivos;
-        for (Veiculo veiculo : veiculosAtivos) {
-            System.out.println("tentar parar");
+        while (!veiculosAtivos.isEmpty()) {
+            Veiculo veiculo = veiculosAtivos.removeFirst();
             veiculo.parar();
         }
-        veiculosAtivos.clear();
     }
 
 

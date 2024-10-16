@@ -14,7 +14,7 @@ public class Veiculo implements Runnable, Subject {
     private int posicaoY;
     private Malha malha;
     private SyncStrategy syncStrategy;
-    private boolean running = true;
+    private volatile boolean running = true;
     private List<Observer> observers;
     private List<ObserverRemove> observersRemove;
 

@@ -5,6 +5,7 @@ import com.simulator.model.Malha;
 import com.simulator.model.Veiculo;
 import com.simulator.util.GridLoader;
 import com.simulator.util.Observer.Observer;
+import com.simulator.util.Observer.ObserverRemove;
 import com.simulator.util.Strategy.MonitorStrategy;
 import com.simulator.util.Strategy.SemaphoreStrategy;
 import com.simulator.util.Strategy.SyncStrategy;
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimuladorTrafego extends Application implements Observer {
+public class SimuladorTrafego extends Application implements Observer, ObserverRemove {
 
     private Malha malha;
     private Map<Veiculo, Rectangle> veiculoShapes;
@@ -133,6 +134,17 @@ public class SimuladorTrafego extends Application implements Observer {
             } else {
                 GridPane.setColumnIndex(shape, veiculo.getPosicaoX() + 1);
                 GridPane.setRowIndex(shape, veiculo.getPosicaoY() + 1);
+            }
+        });
+    }
+
+    @Override
+    public void remove(Veiculo veiculo) {
+        System.out.println("caiu aqui");
+        Platform.runLater(() -> {
+            Rectangle shape = veiculoShapes.remove(veiculo);
+            if (shape != null) {
+                malhaView.getGridPane().getChildren().remove(shape);
             }
         });
     }

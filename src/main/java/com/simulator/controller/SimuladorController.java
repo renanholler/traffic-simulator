@@ -31,6 +31,7 @@ public class SimuladorController {
             while(insercaoAtiva) {
                 if(veiculosAtivos.size() < quantidadeVeiculos) {
                     Veiculo veiculo = VeiculoFactory.createVeiculo(malha, syncStrategy, simuladorTrafego);
+                    veiculo.registraObserver(simuladorTrafego);
                     veiculosAtivos.add(veiculo);
                     new Thread(veiculo).start();
                 }

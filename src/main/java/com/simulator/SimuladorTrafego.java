@@ -1,6 +1,5 @@
 package com.simulator;
 
-import com.simulator.controller.MalhaController;
 import com.simulator.controller.SimuladorController;
 import com.simulator.model.Malha;
 import com.simulator.model.Veiculo;
@@ -9,20 +8,17 @@ import com.simulator.util.Observer.Observer;
 import com.simulator.util.Strategy.MonitorStrategy;
 import com.simulator.util.Strategy.SemaphoreStrategy;
 import com.simulator.util.Strategy.SyncStrategy;
+import com.simulator.view.MalhaView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+
 import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
@@ -32,31 +28,28 @@ import java.util.Map;
 public class SimuladorTrafego extends Application implements Observer {
 
     private Malha malha;
-    private GridPane gridPane;
     private Map<Veiculo, Rectangle> veiculoShapes;
     private SimuladorController controller;
     private SyncStrategy syncStrategy;
     private ComboBox<String> strategyComboBox;
     private int quantidadeVeiculos;
     private long intervaloInsercao;
+    private MalhaView malhaView;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         veiculoShapes = new HashMap<>();
 
         BorderPane root = new BorderPane();
-        gridPane = new GridPane();
 
         try {
             malha = GridLoader.loadGridFromFile("/malhas/malha-exemplo-2.txt");
-            MalhaController malhaController = new MalhaController(malha);
-            malhaController.inicializaGridPane(gridPane);
+            malhaView = new MalhaView(malha);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        gridPane.setAlignment(Pos.CENTER);
-        root.setCenter(gridPane);
+        root.setCenter(malhaView.getGridPane());
 
         // Adicionar controles
         root.setTop(createControlPanel());
@@ -65,7 +58,6 @@ public class SimuladorTrafego extends Application implements Observer {
         stage.setTitle("Simulador de Tráfego");
         stage.setScene(scene);
         stage.show();
-
     }
 
     private HBox createControlPanel() {
@@ -75,11 +67,11 @@ public class SimuladorTrafego extends Application implements Observer {
 
         // Campo para quantidade de veículos
         TextField quantidadeVeiculosField = new TextField();
-        quantidadeVeiculosField.setText("Quantidade de Veículos");
+        quantidadeVeiculosField.setPromptText("Quantidade de Veículos");
 
         // Campo para intervalo de inserção
         TextField intervaloInsercaoField = new TextField();
-        intervaloInsercaoField.setText("Intervalo de Inserção (ms)");
+        intervaloInsercaoField.setPromptText("Intervalo de Inserção (ms)");
 
         // ComboBox para escolher a estratégia
         strategyComboBox = new ComboBox<>();
@@ -137,7 +129,7 @@ public class SimuladorTrafego extends Application implements Observer {
             if (shape == null) {
                 shape = new Rectangle(30, 30, Color.BLACK);
                 veiculoShapes.put(veiculo, shape);
-                gridPane.add(shape, veiculo.getPosicaoX() + 1, veiculo.getPosicaoY() + 1);
+                malhaView.getGridPane().add(shape, veiculo.getPosicaoX() + 1, veiculo.getPosicaoY() + 1);
             } else {
                 GridPane.setColumnIndex(shape, veiculo.getPosicaoX() + 1);
                 GridPane.setRowIndex(shape, veiculo.getPosicaoY() + 1);
@@ -148,5 +140,4 @@ public class SimuladorTrafego extends Application implements Observer {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

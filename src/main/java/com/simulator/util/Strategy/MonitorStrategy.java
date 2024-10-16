@@ -5,7 +5,7 @@ import com.simulator.model.Celula;
 public class MonitorStrategy implements SyncStrategy {
 
     @Override
-    public void acquire(Celula[] celulas) throws InterruptedException {
+    public synchronized void acquire(Celula[] celulas) throws InterruptedException {
         synchronized (this) {
             for (Celula celula : celulas) {
                 synchronized (celula) {
@@ -19,7 +19,7 @@ public class MonitorStrategy implements SyncStrategy {
     }
 
     @Override
-    public void release(Celula[] celulas) {
+    public synchronized void release(Celula[] celulas) {
         synchronized (this) {
             for (Celula celula : celulas) {
                 synchronized (celula) {

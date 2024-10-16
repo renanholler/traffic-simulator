@@ -2,6 +2,9 @@ package com.simulator.model;
 
 import com.simulator.util.Factory.ModelFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Malha {
 
     private Celula[][] grid;
@@ -56,4 +59,47 @@ public class Malha {
     public void setLenY(int lenY) {
         this.lenY = lenY;
     }
+
+    public List<int[]> getPontosEntrada() {
+        List<int[]> pontosEntrada = new ArrayList<>();
+        for(int i = 0; i <= lenX && (i == 0 || i == lenX); i++) {
+            for(int j = 0; j <= lenY && (j == 0 || j == lenY); j++) {
+                if(ehPontoEntrada(getLado(i,j), getCelula(i,j).getTipo())) {
+                    pontosEntrada.add(new int[]{i,j});
+                }
+            }
+        }
+        return pontosEntrada;
+    }
+
+    public int getLado(int x, int y) {
+        if(x == 0) {
+            return 4;
+        }
+        if(x == lenX -1) {
+            return 2;
+        }
+        if(y == 0) {
+            return 1;
+        }
+        if(y == lenY - 1) {
+            return 3;
+        }
+        return 0;
+    }
+
+
+    private boolean ehPontoEntrada(int lado, int tipoCelula) {
+        if (lado == 1 && tipoCelula == 2) {
+            return true;
+        }
+        if (lado == 2 && tipoCelula == 1) {
+            return true;
+        }
+        if (lado == 3 && tipoCelula == 4) {
+            return true;
+        }
+        return lado == 4 && tipoCelula == 3;
+    }
+
 }

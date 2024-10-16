@@ -5,23 +5,22 @@ import com.simulator.model.Malha;
 import com.simulator.model.Veiculo;
 import com.simulator.util.Strategy.SyncStrategy;
 
+import java.util.List;
 import java.util.Random;
 
 public class VeiculoFactory {
 
     public static Veiculo createVeiculo(Malha malha, SyncStrategy strategy, SimuladorTrafego simuladorTrafego) {
         int velocidade = gerarVelocidadeAleatoria();
-        int[] localizacao = getRandomStartPoint(malha);
-        int startX = localizacao[0];
-        int startY = localizacao[1];
-        Veiculo veiculo = new Veiculo(velocidade, malha, strategy, startX, startY);
-        veiculo.registraObserver(simuladorTrafego);
-        return veiculo;
+        int[] pontosEntrada = selecionarPontosEntrada(malha);
+        return new Veiculo(velocidade, malha, strategy, pontosEntrada[0], pontosEntrada[1]);
     }
 
-    private static int[] getRandomStartPoint(Malha malha) {
-        //@TODO finalizar saporra
-        return new int[]{7,7};
+    private static int[] selecionarPontosEntrada(Malha malha) {
+        List<int[]> pontosEntrada = malha.getPontosEntrada();
+        System.out.println(pontosEntrada);
+        Random random = new Random();
+        return pontosEntrada.get(random.nextInt(pontosEntrada.size()));
     }
 
     /**

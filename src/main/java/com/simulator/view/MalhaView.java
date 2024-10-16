@@ -34,13 +34,13 @@ public class MalhaView {
         }
 
         // Preenche a malha com as cores corretas para cada célula
-        for (int i = 0; i < malha.getLenY(); i++) {
-            for (int j = 0; j < malha.getLenX(); j++) {
+        for (int i = 0; i < malha.getLenX(); i++) {
+            for (int j = 0; j < malha.getLenY(); j++) {
                 Celula celula = malha.getCelula(i, j);
                 Rectangle rect = new Rectangle(cellSize, cellSize);
                 rect.setStroke(Color.BLACK);
                 rect.setFill(getColorForCell(celula.getTipo()));
-                gridPane.add(rect, j + 1, i + 1);
+                gridPane.add(rect, i + 1, j + 1);
             }
         }
 

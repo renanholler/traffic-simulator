@@ -18,7 +18,6 @@ public class VeiculoFactory {
 
     private static int[] selecionarPontosEntrada(Malha malha) {
         List<int[]> pontosEntrada = malha.getPontosEntrada();
-        System.out.println(pontosEntrada);
         Random random = new Random();
         return pontosEntrada.get(random.nextInt(pontosEntrada.size()));
     }

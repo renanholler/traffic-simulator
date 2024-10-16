@@ -22,16 +22,16 @@ public class GridLoader {
         List<String> linhas = reader.lines().collect(Collectors.toList());
 
         // Primeira e segunda linha são as dimensões da malha
-        int tamanhoX = Integer.parseInt(linhas.get(0).trim());
-        int tamanhoY = Integer.parseInt(linhas.get(1).trim());
+        int tamanhoY = Integer.parseInt(linhas.get(0).trim()); //linha
+        int tamanhoX = Integer.parseInt(linhas.get(1).trim()); //coluna
 
-        Malha malha = ModelFactory.createMalha(tamanhoX, tamanhoY);
+        Malha malha = ModelFactory.createMalha(tamanhoY, tamanhoX);
 
         // Preenche a matriz com os valores da malha a partir da terceira linha
-        for (int i = 0; i < tamanhoX; i++) {
+        for (int i = 0; i < tamanhoY; i++) {
             // Divide a linha por qualquer número de espaços ou tabulações
             String[] linha = linhas.get(i + 2).trim().split("\\s+");
-            for (int j = 0; j < tamanhoY; j++) {
+            for (int j = 0; j < tamanhoX; j++) {
                 malha.setTipoCelula(i, j, Integer.parseInt(linha[j]));
             }
         }

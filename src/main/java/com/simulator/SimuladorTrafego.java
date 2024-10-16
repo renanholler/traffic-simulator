@@ -43,7 +43,7 @@ public class SimuladorTrafego extends Application implements Observer {
         BorderPane root = new BorderPane();
 
         try {
-            malha = GridLoader.loadGridFromFile("/malhas/malha-exemplo-2.txt");
+            malha = GridLoader.loadGridFromFile("/malhas/malha-exemplo-1.txt");
             malhaView = new MalhaView(malha);
         } catch (IOException e) {
             e.printStackTrace();

@@ -63,8 +63,8 @@ public class Veiculo implements Runnable, Subject {
         int nextY = proximaPosicao[1];
 
         // Obter as células envolvidas
-        Celula celulaAtual = malha.getCelula(posicaoY, posicaoX);
-        Celula celulaProxima = malha.getCelula(nextY, nextX);
+        Celula celulaAtual = malha.getCelula(posicaoX, posicaoY);
+        Celula celulaProxima = malha.getCelula(nextX, nextY);
 
         // Tentar adquirir as células necessárias
         syncStrategy.acquire(new Celula[]{celulaProxima});
@@ -89,7 +89,7 @@ public class Veiculo implements Runnable, Subject {
     private int[] calcularProximaPosicao() {
         // Implementar lógica para determinar a próxima posição
         // Exemplo simples: mover para a direita
-        return new int[]{posicaoX, posicaoY - 1};
+        return new int[]{posicaoX, posicaoY};
     }
 
     private boolean chegouAoDestino() {

@@ -11,7 +11,7 @@ public class Aplicacao {
     public static void main(String[] args) {
         try {
             // Carregar a malha viária
-            MalhaViaria malha = new MalhaViaria("malha-exemplo-3.txt");
+            MalhaViaria malha = new MalhaViaria("/malhas/malha-exemplo-3.txt");
 
             // Escolher a estratégia de exclusão mútua
             ExclusaoMutuaStrategy exclusaoMutua = new SemaforoStrategy(malha);

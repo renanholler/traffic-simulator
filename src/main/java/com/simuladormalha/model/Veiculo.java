@@ -50,6 +50,10 @@ public class Veiculo extends Thread {
     private List<int[]> escolherProximaPosicao() {
         // Implementar lógica para escolher a próxima posição com base no tipo da célula atual
         int tipo = malha.getMalha()[linhaAtual][colunaAtual].getTipo();
+        if(malha.getPontosSaida().contains(malha.getCelula(linhaAtual,colunaAtual))) {
+            desativar();
+        }
+
         List<int[]> movimentosPossiveis = new ArrayList<>();
         Random random = new Random();
 
@@ -105,10 +109,6 @@ public class Veiculo extends Thread {
     private void moverVeiculo(List<Celula> caminho) {
         malha.getMalha()[linhaAtual][colunaAtual].setOcupada(false);
         for (Celula celula : caminho) {
-            if(!malha.getPontosSaida().contains(malha.getMalha()[linhaAtual][colunaAtual])) {
-                desativar();
-                return;
-            }
             linhaAtual = celula.getLinha();
             colunaAtual = celula.getColuna();
             celula.setOcupada(true);
@@ -117,6 +117,7 @@ public class Veiculo extends Thread {
 
     public void desativar() {
         ativo = false;
+        malha.getCelula(linhaAtual, colunaAtual).setOcupada(false);
         interrupt();
     }
 

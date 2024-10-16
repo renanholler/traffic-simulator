@@ -21,7 +21,7 @@ public class VeiculoFactory {
     public Veiculo criarVeiculo() {
         List<int[]> entradas = malha.getPontosEntrada();
         int[] entrada = entradas.get(random.nextInt(entradas.size()));
-        int velocidade = 500 + random.nextInt(1000);
+        int velocidade = 5 + random.nextInt(100);
 
         return new Veiculo(malha, entrada[0], entrada[1], velocidade, exclusaoMutua);
     }

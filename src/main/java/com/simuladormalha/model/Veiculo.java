@@ -8,11 +8,11 @@ import java.util.Random;
 
 public class Veiculo extends Thread {
 
-    private MalhaViaria malha;
+    private final MalhaViaria malha;
     private int linhaAtual;
     private int colunaAtual;
-    private int velocidade;
-    private ExclusaoMutuaStrategy exclusaoMutua;
+    private final int velocidade;
+    private final ExclusaoMutuaStrategy exclusaoMutua;
     private boolean ativo;
 
     public Veiculo(MalhaViaria malha, int linhaInicial, int colunaInicial, int velocidade, ExclusaoMutuaStrategy exclusaoMutua) {
@@ -52,6 +52,7 @@ public class Veiculo extends Thread {
         int tipo = malha.getMalha()[linhaAtual][colunaAtual].getTipo();
         if(malha.getPontosSaida().contains(malha.getCelula(linhaAtual,colunaAtual))) {
             desativar();
+            return null;
         }
 
         List<int[]> movimentosPossiveis = new ArrayList<>();
@@ -90,6 +91,12 @@ public class Veiculo extends Thread {
 
         if (movimentosPossiveis.isEmpty())
             return null;
+
+        for(int[] movimento : movimentosPossiveis) {
+            if(movimento[0] > 9 || movimento[1] > 15 || movimento[1] < 0 || movimento[0] < 0) {
+                int a = 0;
+            }
+        }
 
         int[] proximaPosicao = movimentosPossiveis.get(random.nextInt(movimentosPossiveis.size()));
         List<int[]> caminho = new ArrayList<>();

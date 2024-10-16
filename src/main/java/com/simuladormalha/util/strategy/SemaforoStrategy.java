@@ -23,7 +23,7 @@ public class SemaforoStrategy implements ExclusaoMutuaStrategy {
     }
 
     @Override
-    public boolean tentarReservar(List<Celula> caminho) {
+    public synchronized boolean tentarReservar(List<Celula> caminho) {
         for (Celula celula : caminho) {
             try {
                 if (!semaforos[celula.getLinha()][celula.getColuna()].tryAcquire()) {

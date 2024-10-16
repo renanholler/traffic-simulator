@@ -38,8 +38,8 @@ public class MalhaViaria {
         pontosEntrada = new ArrayList<>();
         pontosSaida = new ArrayList<>();
 
-        for (int i = 0; i < colunas; i++) {
-            for (int j = 0; j < linhas; j++) {
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
                 if (ehPontoEntrada(getLado(i, j), malha[i][j].getTipo())) {
                     pontosEntrada.add(malha[i][j]);
                 } else if(ehPontoSaida(getLado(i,j), malha[i][j].getTipo())) {
@@ -49,46 +49,46 @@ public class MalhaViaria {
         }
     }
 
-    public int getLado(int x, int y) {
-        if (x == colunas - 1) {
-            return 2;
+    public Direcao getLado(int linha, int coluna) {
+        if (linha == linhas - 1) {
+            return Direcao.BAIXO;
         }
-        if (x == 0) {
-            return 4;
+        if (linha == 0) {
+            return Direcao.CIMA;
         }
-        if (y == linhas - 1) {
-            return 3;
+        if (coluna == colunas - 1) {
+            return Direcao.DIREITA;
         }
-        if (y == 0) {
-            return 1;
+        if (coluna == 0) {
+            return Direcao.ESQUERDA;
         }
-        return 0;
+        return null;
     }
 
-    private boolean ehPontoEntrada(int lado, int tipoCelula) {
-        if (lado == 1 && tipoCelula == 2) {
+    private boolean ehPontoEntrada(Direcao lado, int tipoCelula) {
+        if (lado == Direcao.ESQUERDA && tipoCelula == 2) {
             return true;
         }
-        if (lado == 2 && tipoCelula == 1) {
+        if (lado == Direcao.BAIXO && tipoCelula == 1) {
             return true;
         }
-        if (lado == 3 && tipoCelula == 4) {
+        if (lado == Direcao.DIREITA && tipoCelula == 4) {
             return true;
         }
-        return lado == 4 && tipoCelula == 3;
+        return lado == Direcao.CIMA && tipoCelula == 3;
     }
 
-    private boolean ehPontoSaida(int lado, int tipoCelula) {
-        if (lado == 1 && tipoCelula == 4) {
+    private boolean ehPontoSaida(Direcao lado, int tipoCelula) {
+        if (lado == Direcao.ESQUERDA && tipoCelula == 4) {
             return true;
         }
-        if (lado == 2 && tipoCelula == 3) {
+        if (lado == Direcao.BAIXO && tipoCelula == 3) {
             return true;
         }
-        if (lado == 3 && tipoCelula == 2) {
+        if (lado == Direcao.DIREITA && tipoCelula == 2) {
             return true;
         }
-        return lado == 4 && tipoCelula == 1;
+        return lado == Direcao.CIMA && tipoCelula == 1;
     }
 
     public Celula getCelula(int linha, int coluna) {

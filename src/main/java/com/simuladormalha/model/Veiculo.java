@@ -287,7 +287,7 @@ public class Veiculo extends Thread {
     }
 
     private int direita(int celulas) {
-        return linhaAtual + celulas;
+        return colunaAtual + celulas;
     }
 
     private int esquerda(int celulas) {

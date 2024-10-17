@@ -17,6 +17,7 @@ public class ControllerSimulacao {
     private int maxVeiculos;
     private int intervaloInsercao; // em milissegundos
     private boolean insercaoAtiva;
+    private boolean simulacaoAtiva;
 
     public ControllerSimulacao(MalhaViaria malha, ExclusaoMutuaStrategy exclusaoMutua) {
         this.malha = malha;
@@ -24,12 +25,19 @@ public class ControllerSimulacao {
         this.veiculoFactory = new VeiculoFactory(malha, exclusaoMutua);
         this.veiculos = new ArrayList<>();
         this.insercaoAtiva = false;
+        this.simulacaoAtiva = false;
+    }
+
+    public void definirExclusaoMutuaStrategy(ExclusaoMutuaStrategy exclusaoMutua) {
+        this.exclusaoMutua = exclusaoMutua;
+        this.veiculoFactory.setExclusaoMutua(exclusaoMutua);
     }
 
     public void iniciarSimulacao(int maxVeiculos, int intervaloInsercao) {
         this.maxVeiculos = maxVeiculos;
         this.intervaloInsercao = intervaloInsercao;
         this.insercaoAtiva = true;
+        this.simulacaoAtiva = true;
 
         new Thread(() -> {
             while (insercaoAtiva) {
@@ -57,8 +65,13 @@ public class ControllerSimulacao {
         this.insercaoAtiva = false;
     }
 
+    public void retornarInsercao() {
+        this.insercaoAtiva = true;
+    }
+
     public void encerrarSimulacao() {
         this.insercaoAtiva = false;
+        this.simulacaoAtiva = false;
         for (Veiculo veiculo : veiculos) {
             veiculo.desativar();
         }

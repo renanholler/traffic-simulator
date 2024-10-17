@@ -34,7 +34,7 @@ public class Veiculo extends Thread {
                     continue;
                 }
                 Celula proximoMovimento = escolherProximaPosicao();
-                if (proximoMovimento ==   null) {
+                if (proximoMovimento == null) {
                     Thread.sleep(velocidade);
                     continue;
                 }
@@ -59,9 +59,6 @@ public class Veiculo extends Thread {
     }
 
     private Celula escolherProximaPosicao() {
-        if(rotaCruzamento.isEmpty() && getDirecaoAtual() == null) {
-            int a = 1;
-        }
         if(!rotaCruzamento.isEmpty()) {
             return rotaCruzamento.removeFirst();
         }
@@ -71,16 +68,15 @@ public class Veiculo extends Thread {
 
         if(isCruzamento(nextLinha, nextColuna)) {
             List<Celula> caminho = getRotaRandomica();
+            while(caminho.getLast().getTipo() == 0) {
+                caminho = getRotaRandomica();
+            }
             if(this.exclusaoMutua.isCaminhoLivre(caminho) && exclusaoMutua.tentarReservar(caminho)) {
                 rotaCruzamento = caminho;
                 assert rotaCruzamento != null;
-                if(rotaCruzamento.isEmpty()) {
-                    int a = 1;
-                }
-                if(rotaCruzamento.size() == 1) {
-                    int a = 1;
-                }
                 return rotaCruzamento.removeFirst();
+            } else {
+                return null;
             }
         }
         Celula proximaPosicao = malha.getCelula(nextLinha, nextColuna);
@@ -364,6 +360,7 @@ public class Veiculo extends Thread {
 
     private void moverVeiculo(Celula celula) {
         malha.getMalha()[linhaAtual][colunaAtual].setOcupada(false);
+        exclusaoMutua.liberarCaminho(List.of(malha.getCelula(linhaAtual, colunaAtual)));
         linhaAtual = celula.getLinha();
         colunaAtual = celula.getColuna();
         celula.setOcupada(true);
@@ -372,6 +369,7 @@ public class Veiculo extends Thread {
     public void desativar() {
         ativo = false;
         malha.getCelula(linhaAtual, colunaAtual).setOcupada(false);
+        malha.getCelula(linhaAtual, colunaAtual).setReservada(false);
         interrupt();
     }
 

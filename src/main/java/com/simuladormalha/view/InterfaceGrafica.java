@@ -97,7 +97,7 @@ public class InterfaceGrafica extends JFrame {
         setVisible(true);
 
         // Atualiza a interface a cada 100ms
-        new Timer(16, e -> painelMalha.repaint()).start();
+        new Timer(8, e -> painelMalha.repaint()).start();
     }
 
     private void iniciarSimulacao() {

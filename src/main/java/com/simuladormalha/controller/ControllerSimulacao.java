@@ -11,17 +11,13 @@ import java.util.List;
 public class ControllerSimulacao {
 
     private MalhaViaria malha;
-    private ExclusaoMutuaStrategy exclusaoMutua;
     private VeiculoFactory veiculoFactory;
     private List<Veiculo> veiculos;
-    private int maxVeiculos;
-    private int intervaloInsercao; // em milissegundos
     private boolean insercaoAtiva;
     private boolean simulacaoAtiva;
 
     public ControllerSimulacao(MalhaViaria malha, ExclusaoMutuaStrategy exclusaoMutua) {
         this.malha = malha;
-        this.exclusaoMutua = exclusaoMutua;
         this.veiculoFactory = new VeiculoFactory(malha, exclusaoMutua);
         this.veiculos = new ArrayList<>();
         this.insercaoAtiva = false;
@@ -29,13 +25,11 @@ public class ControllerSimulacao {
     }
 
     public void definirExclusaoMutuaStrategy(ExclusaoMutuaStrategy exclusaoMutua) {
-        this.exclusaoMutua = exclusaoMutua;
         this.veiculoFactory.setExclusaoMutua(exclusaoMutua);
     }
 
     public void iniciarSimulacao(int maxVeiculos, int intervaloInsercao) {
-        this.maxVeiculos = maxVeiculos;
-        this.intervaloInsercao = intervaloInsercao;
+        // em milissegundos
         this.insercaoAtiva = true;
         this.simulacaoAtiva = true;
 

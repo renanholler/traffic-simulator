@@ -34,7 +34,7 @@ public class MalhaViaria {
         br.close();
     }
 
-    public void identificarPontosEntradaSaida() {
+    private void identificarPontosEntradaSaida() {
         pontosEntrada = new ArrayList<>();
         pontosSaida = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class MalhaViaria {
         }
     }
 
-    public Direcao getLado(int linha, int coluna) {
+    private Direcao getLado(int linha, int coluna) {
         if (linha == linhas - 1) {
             return Direcao.BAIXO;
         }

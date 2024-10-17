@@ -19,7 +19,6 @@ public class InterfaceGrafica extends JFrame {
     private JTextField campoIntervaloInsercao;
     private JButton botaoIniciar;
     private JButton botaoEncerrarInsercao;
-    private JButton botaoRetomarInsercao;
     private JButton botaoEncerrarSimulacao;
     private JComboBox<String> comboExclusaoMutua;
 
@@ -55,9 +54,6 @@ public class InterfaceGrafica extends JFrame {
         botaoEncerrarInsercao = new JButton("Parar Inserção");
         painelControles.add(botaoEncerrarInsercao);
 
-        botaoRetomarInsercao = new JButton("Retomar Inserção");
-        painelControles.add(botaoRetomarInsercao);
-
         botaoEncerrarSimulacao = new JButton("Encerrar Simulação");
         painelControles.add(botaoEncerrarSimulacao);
 
@@ -79,13 +75,6 @@ public class InterfaceGrafica extends JFrame {
             }
         });
 
-        botaoRetomarInsercao.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controlador.retornarInsercao();
-            }
-        });
-
         botaoEncerrarSimulacao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,7 +85,7 @@ public class InterfaceGrafica extends JFrame {
 
         setVisible(true);
 
-        // Atualiza a interface a cada 100ms
+        // Atualiza a interface a cada 8ms
         new Timer(8, e -> painelMalha.repaint()).start();
     }
 

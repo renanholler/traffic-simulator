@@ -26,4 +26,8 @@ public class VeiculoFactory {
 
         return new Veiculo(malha, entrada.getLinha(), entrada.getColuna(), velocidade, exclusaoMutua);
     }
+
+    public void setExclusaoMutua(ExclusaoMutuaStrategy exclusaoMutua) {
+        this.exclusaoMutua = exclusaoMutua;
+    }
 }

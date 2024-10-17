@@ -33,11 +33,6 @@ public class SemaforoStrategy implements ExclusaoMutuaStrategy {
     }
 
     @Override
-    public synchronized boolean isOcupado(Celula celula) {
-        return celula.estaOcupada() && semaforos[celula.getLinha()][celula.getColuna()].availablePermits() == 0;
-    }
-
-    @Override
     public synchronized boolean tentarReservar(List<Celula> caminho) {
         for (Celula celula : caminho) {
             try {

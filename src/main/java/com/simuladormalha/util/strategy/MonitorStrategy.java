@@ -28,11 +28,6 @@ public class MonitorStrategy implements ExclusaoMutuaStrategy {
     }
 
     @Override
-    public boolean isOcupado(Celula celula) {
-        return celula.estaReservada();
-    }
-
-    @Override
     public boolean isCaminhoLivre(List<Celula> caminho) {
         boolean livre = true;
         for (Celula celula : caminho) {

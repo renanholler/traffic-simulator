@@ -3,6 +3,7 @@ package com.simuladormalha.model;
 import com.simuladormalha.util.strategy.ExclusaoMutuaStrategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ public class Veiculo extends Thread {
     private final int velocidade;
     private final ExclusaoMutuaStrategy exclusaoMutua;
     private boolean ativo;
+    private List<Celula> rotaCruzamento = new ArrayList<>();
 
     public Veiculo(MalhaViaria malha, int linhaInicial, int colunaInicial, int velocidade, ExclusaoMutuaStrategy exclusaoMutua) {
         this.malha = malha;
@@ -31,16 +33,16 @@ public class Veiculo extends Thread {
                 if(chegouAoDestino()) {
                     continue;
                 }
-                List<Celula> proximosMovimentos = escolherProximaPosicao();
-                if (proximosMovimentos ==   null) {
+                Celula proximoMovimento = escolherProximaPosicao();
+                if (proximoMovimento ==   null) {
                     Thread.sleep(velocidade);
                     continue;
                 }
 
-                if (exclusaoMutua.tentarReservar(proximosMovimentos)) {
-                    moverVeiculo(proximosMovimentos);
-                    exclusaoMutua.liberarCaminho(proximosMovimentos);
-                }
+                moverVeiculo(proximoMovimento);
+//                if (exclusaoMutua.tentarReservar(new ArrayList<>(proximoMovimento))) {
+//                    exclusaoMutua.liberarCaminho(proximoMovimento);
+//                }
                 Thread.sleep(velocidade);
             }
         } catch (InterruptedException e) {
@@ -56,7 +58,69 @@ public class Veiculo extends Thread {
         return false;
     }
 
-    private List<Celula> escolherProximaPosicao() {
+    private Celula escolherProximaPosicao() {
+        if(rotaCruzamento.isEmpty() && getDirecaoAtual() == null) {
+            int a = 1;
+        }
+        if(!rotaCruzamento.isEmpty()) {
+            return rotaCruzamento.removeFirst();
+        }
+
+        int nextLinha = linhaAtual + deltaLinha(getDirecaoAtual());
+        int nextColuna = colunaAtual + deltaColuna(getDirecaoAtual());
+
+        if(isCruzamento(nextLinha, nextColuna)) {
+            List<Celula> caminho = getRotaRandomica();
+            if(this.exclusaoMutua.isCaminhoLivre(caminho) && exclusaoMutua.tentarReservar(caminho)) {
+                rotaCruzamento = caminho;
+                assert rotaCruzamento != null;
+                if(rotaCruzamento.isEmpty()) {
+                    int a = 1;
+                }
+                if(rotaCruzamento.size() == 1) {
+                    int a = 1;
+                }
+                return rotaCruzamento.removeFirst();
+            }
+        }
+        Celula proximaPosicao = malha.getCelula(nextLinha, nextColuna);
+
+        if(!(proximaPosicao.estaReservada() || proximaPosicao.estaOcupada()) && exclusaoMutua.tentarReservar(List.of(proximaPosicao))) {
+            return proximaPosicao;
+        }
+
+        return null;
+    }
+
+    private int deltaLinha(Direcao direcaoAtual) {
+        if(direcaoAtual.equals(Direcao.BAIXO)) {
+            return 1;
+        } else if (direcaoAtual.equals(Direcao.CIMA)) {
+            return -1;
+        }
+        return 0;
+    }
+
+    private int deltaColuna(Direcao direcaoAtual) {
+        if(direcaoAtual.equals(Direcao.DIREITA)) {
+            return 1;
+        } else if (direcaoAtual.equals(Direcao.ESQUERDA)){
+            return -1;
+        }
+         return 0;
+    }
+
+    private Direcao getDirecaoAtual() {
+        return switch (malha.getCelula(linhaAtual, colunaAtual).getTipo()) {
+            case 1 -> Direcao.CIMA;
+            case 2 -> Direcao.DIREITA;
+            case 3 -> Direcao.BAIXO;
+            case 4 -> Direcao.ESQUERDA;
+            default -> null;
+        };
+    }
+
+    private List<Celula> getRotaRandomica() {
         List<Celula> caminho = new ArrayList<>();
         List<List<Celula>> caminhos = new ArrayList<>();
         Random random = new Random();
@@ -298,13 +362,11 @@ public class Veiculo extends Thread {
         return colunaAtual - celulas;
     }
 
-    private void moverVeiculo(List<Celula> caminho) {
+    private void moverVeiculo(Celula celula) {
         malha.getMalha()[linhaAtual][colunaAtual].setOcupada(false);
-        for (Celula celula : caminho) {
-            linhaAtual = celula.getLinha();
-            colunaAtual = celula.getColuna();
-            celula.setOcupada(true);
-        }
+        linhaAtual = celula.getLinha();
+        colunaAtual = celula.getColuna();
+        celula.setOcupada(true);
     }
 
     public void desativar() {
@@ -319,6 +381,10 @@ public class Veiculo extends Thread {
 
     public int getColunaAtual() {
         return colunaAtual;
+    }
+
+    private boolean isCruzamento(int linha, int coluna) {
+        return malha.getCelula(linha,coluna).getTipo() >= 5;
     }
 
 }

@@ -28,17 +28,18 @@ public class Veiculo extends Thread {
     public void run() {
         try {
             while (ativo) {
-                List<int[]> proximosMovimentos = escolherProximaPosicao();
+                if(chegouAoDestino()) {
+                    continue;
+                }
+                List<Celula> proximosMovimentos = escolherProximaPosicao();
                 if (proximosMovimentos == null) {
                     Thread.sleep(velocidade);
                     continue;
                 }
 
-                List<Celula> caminho = obterCaminho(proximosMovimentos);
-
-                if (exclusaoMutua.tentarReservar(caminho)) {
-                    moverVeiculo(caminho);
-                    exclusaoMutua.liberarCaminho(caminho);
+                if (exclusaoMutua.tentarReservar(proximosMovimentos)) {
+                    moverVeiculo(proximosMovimentos);
+                    exclusaoMutua.liberarCaminho(proximosMovimentos);
                 }
                 Thread.sleep(velocidade);
             }
@@ -47,70 +48,264 @@ public class Veiculo extends Thread {
         }
     }
 
-    private List<int[]> escolherProximaPosicao() {
-        // Implementar lógica para escolher a próxima posição com base no tipo da célula atual
-        int tipo = malha.getMalha()[linhaAtual][colunaAtual].getTipo();
+    private boolean chegouAoDestino() {
         if(malha.getPontosSaida().contains(malha.getCelula(linhaAtual,colunaAtual))) {
             desativar();
-            return null;
+            return true;
         }
+        return false;
+    }
 
-        List<int[]> movimentosPossiveis = new ArrayList<>();
+    private List<Celula> escolherProximaPosicao() {
+        List<Celula> caminho = new ArrayList<>();
+        List<List<Celula>> caminhos = new ArrayList<>();
+        List<List<List<Celula>>> movimentosPossiveis = new ArrayList<>();
         Random random = new Random();
 
-        switch (tipo) {
-            case 1, 5:
-                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
-                break;
-            case 2, 6:
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
-                break;
-            case 3, 7:
-                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
-                break;
-            case 4, 8:
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
-                break;
-            case 9:
-                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
-                break;
-            case 10:
-                movimentosPossiveis.add(new int[]{linhaAtual - 1, colunaAtual});
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
-                break;
-            case 11:
-                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual + 1});
-                break;
-            case 12:
-                movimentosPossiveis.add(new int[]{linhaAtual + 1, colunaAtual});
-                movimentosPossiveis.add(new int[]{linhaAtual, colunaAtual - 1});
+        switch (malha.getCelula(linhaAtual, colunaAtual).getTipo()) {
+            case 1:
+                if (malha.getCelula(cima(1), colunaAtual).getTipo() == 1) {
+                    caminho.add(malha.getCelula(cima(1), colunaAtual));
+                    caminhos.add(caminho);
+                    movimentosPossiveis.add(caminhos);
+                    break;
+                }
+                switch (malha.getCelula(cima(1), colunaAtual).getTipo()) {
+                    case 5:
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(3), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), esquerda(1)));
+                        caminho.add(malha.getCelula(cima(2), esquerda(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), esquerda(1)));
+                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                    case 9:
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(3), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), esquerda(1)));
+                        caminho.add(malha.getCelula(cima(2), esquerda(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), colunaAtual));
+                        caminho.add(malha.getCelula(cima(2), esquerda(1)));
+                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(cima(1), colunaAtual));
+                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                }
+            case 2:
+                if (malha.getCelula(linhaAtual, direita(1)).getTipo() == 2) {
+                    caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                    caminhos.add(caminho);
+                    movimentosPossiveis.add(caminhos);
+                    break;
+                }
+                switch (malha.getCelula(linhaAtual, direita(1)).getTipo()) {
+                    case 6:
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(3)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(cima(1), direita(2)));
+                        caminho.add(malha.getCelula(cima(2), direita(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(cima(1), direita(2)));
+                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                    case 11:
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(3)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(cima(1), direita(2)));
+                        caminho.add(malha.getCelula(cima(2), direita(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(2)));
+                        caminho.add(malha.getCelula(cima(1), direita(2)));
+                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.add(malha.getCelula(baixo(1), direita(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                }
+            case 3:
+                if (malha.getCelula(baixo(1), colunaAtual).getTipo() == 3) {
+                    caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                    caminhos.add(caminho);
+                    movimentosPossiveis.add(caminhos);
+                    break;
+                }
+                switch (malha.getCelula(baixo(1), colunaAtual).getTipo()) {
+                    case 7:
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(3), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), direita(1)));
+                        caminho.add(malha.getCelula(baixo(2), direita(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), direita(1)));
+                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                    case 12:
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(3), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), direita(1)));
+                        caminho.add(malha.getCelula(baixo(2), direita(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(2), direita(1)));
+                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual, direita(1)));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                }
+            case 4:
+                if (malha.getCelula(linhaAtual, esquerda(1)).getTipo() == 4) {
+                    caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                    caminhos.add(caminho);
+                    movimentosPossiveis.add(caminhos);
+                    break;
+                }
+                switch (malha.getCelula(linhaAtual, esquerda(1)).getTipo()) {
+                    case 8:
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(3)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(1)));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                    case 10:
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(3)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(2), esquerda(1)));
+                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
+                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
+                        caminhos.add(new ArrayList<>(caminho));
+                        caminho.clear();
+                        movimentosPossiveis.add(caminhos);
+                        break;
+                }
                 break;
         }
 
         if (movimentosPossiveis.isEmpty())
             return null;
 
-        for(int[] movimento : movimentosPossiveis) {
-            if(movimento[0] > 9 || movimento[1] > 15 || movimento[1] < 0 || movimento[0] < 0) {
-                int a = 0;
-            }
-        }
-
-        int[] proximaPosicao = movimentosPossiveis.get(random.nextInt(movimentosPossiveis.size()));
-        List<int[]> caminho = new ArrayList<>();
-        caminho.add(proximaPosicao);
-
-        return caminho;
+        List<List<Celula>> caminhosPossiveis = movimentosPossiveis.get(random.nextInt(movimentosPossiveis.size()));
+        return caminhosPossiveis.get(random.nextInt(caminhosPossiveis.size()));
     }
 
-    private List<Celula> obterCaminho(List<int[]> movimentos) {
-        List<Celula> caminho = new ArrayList<>();
-        for (int[] pos : movimentos) {
-            caminho.add(malha.getMalha()[pos[0]][pos[1]]);
-        }
-        return caminho;
+    private int cima(int celulas) {
+        return linhaAtual - celulas;
+    }
+
+    private int baixo(int celulas) {
+        return linhaAtual + celulas;
+    }
+
+    private int direita(int celulas) {
+        return linhaAtual + celulas;
+    }
+
+    private int esquerda(int celulas) {
+        return colunaAtual - celulas;
     }
 
     private void moverVeiculo(List<Celula> caminho) {

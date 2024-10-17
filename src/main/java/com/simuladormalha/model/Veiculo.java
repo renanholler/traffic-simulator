@@ -32,7 +32,7 @@ public class Veiculo extends Thread {
                     continue;
                 }
                 List<Celula> proximosMovimentos = escolherProximaPosicao();
-                if (proximosMovimentos == null) {
+                if (proximosMovimentos ==   null) {
                     Thread.sleep(velocidade);
                     continue;
                 }
@@ -59,7 +59,6 @@ public class Veiculo extends Thread {
     private List<Celula> escolherProximaPosicao() {
         List<Celula> caminho = new ArrayList<>();
         List<List<Celula>> caminhos = new ArrayList<>();
-        List<List<List<Celula>>> movimentosPossiveis = new ArrayList<>();
         Random random = new Random();
 
         switch (malha.getCelula(linhaAtual, colunaAtual).getTipo()) {
@@ -67,7 +66,6 @@ public class Veiculo extends Thread {
                 if (malha.getCelula(cima(1), colunaAtual).getTipo() == 1) {
                     caminho.add(malha.getCelula(cima(1), colunaAtual));
                     caminhos.add(caminho);
-                    movimentosPossiveis.add(caminhos);
                     break;
                 }
                 switch (malha.getCelula(cima(1), colunaAtual).getTipo()) {
@@ -90,7 +88,6 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                     case 9:
                         caminho.add(malha.getCelula(cima(1), colunaAtual));
@@ -115,14 +112,12 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(cima(1), direita(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                 }
             case 2:
                 if (malha.getCelula(linhaAtual, direita(1)).getTipo() == 2) {
                     caminho.add(malha.getCelula(linhaAtual, direita(1)));
                     caminhos.add(caminho);
-                    movimentosPossiveis.add(caminhos);
                     break;
                 }
                 switch (malha.getCelula(linhaAtual, direita(1)).getTipo()) {
@@ -141,11 +136,10 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
                         caminho.add(malha.getCelula(linhaAtual, direita(2)));
                         caminho.add(malha.getCelula(cima(1), direita(2)));
-                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
-                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual , direita(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                     case 11:
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
@@ -162,22 +156,20 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
                         caminho.add(malha.getCelula(linhaAtual, direita(2)));
                         caminho.add(malha.getCelula(cima(1), direita(2)));
-                        caminho.add(malha.getCelula(cima(1), esquerda(1)));
-                        caminho.add(malha.getCelula(linhaAtual , esquerda(1)));
+                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(linhaAtual , direita(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
                         caminho.add(malha.getCelula(baixo(1), direita(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                 }
             case 3:
                 if (malha.getCelula(baixo(1), colunaAtual).getTipo() == 3) {
                     caminho.add(malha.getCelula(baixo(1), colunaAtual));
                     caminhos.add(caminho);
-                    movimentosPossiveis.add(caminhos);
                     break;
                 }
                 switch (malha.getCelula(baixo(1), colunaAtual).getTipo()) {
@@ -196,11 +188,10 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(baixo(1), colunaAtual));
                         caminho.add(malha.getCelula(baixo(2), colunaAtual));
                         caminho.add(malha.getCelula(baixo(2), direita(1)));
-                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(baixo(1), direita(1)));
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                     case 12:
                         caminho.add(malha.getCelula(baixo(1), colunaAtual));
@@ -217,21 +208,19 @@ public class Veiculo extends Thread {
                         caminho.add(malha.getCelula(baixo(1), colunaAtual));
                         caminho.add(malha.getCelula(baixo(2), colunaAtual));
                         caminho.add(malha.getCelula(baixo(2), direita(1)));
-                        caminho.add(malha.getCelula(cima(1), direita(1)));
+                        caminho.add(malha.getCelula(baixo(1), direita(1)));
                         caminho.add(malha.getCelula(linhaAtual, direita(1)));
                         caminho.clear();
                         caminho.add(malha.getCelula(baixo(1), colunaAtual));
                         caminho.add(malha.getCelula(baixo(1), esquerda(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                 }
             case 4:
                 if (malha.getCelula(linhaAtual, esquerda(1)).getTipo() == 4) {
                     caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                     caminhos.add(caminho);
-                    movimentosPossiveis.add(caminhos);
                     break;
                 }
                 switch (malha.getCelula(linhaAtual, esquerda(1)).getTipo()) {
@@ -243,18 +232,17 @@ public class Veiculo extends Thread {
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                         caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(2)));
                         caminho.add(malha.getCelula(baixo(2), esquerda(2)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                         caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(1)));
-                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(1)));
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                     case 10:
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
@@ -264,32 +252,30 @@ public class Veiculo extends Thread {
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                         caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(2)));
                         caminho.add(malha.getCelula(baixo(2), esquerda(2)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                         caminho.add(malha.getCelula(linhaAtual, esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(2)));
-                        caminho.add(malha.getCelula(baixo(2), esquerda(1)));
-                        caminho.add(malha.getCelula(baixo(2), colunaAtual));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(2)));
+                        caminho.add(malha.getCelula(baixo(1), esquerda(1)));
+                        caminho.add(malha.getCelula(baixo(1), colunaAtual));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
                         caminho.add(malha.getCelula(linhaAtual, esquerda(1)));
                         caminho.add(malha.getCelula(cima(1), esquerda(1)));
                         caminhos.add(new ArrayList<>(caminho));
                         caminho.clear();
-                        movimentosPossiveis.add(caminhos);
                         break;
                 }
                 break;
         }
 
-        if (movimentosPossiveis.isEmpty())
+        if (caminhos.isEmpty())
             return null;
 
-        List<List<Celula>> caminhosPossiveis = movimentosPossiveis.get(random.nextInt(movimentosPossiveis.size()));
-        return caminhosPossiveis.get(random.nextInt(caminhosPossiveis.size()));
+        return caminhos.get(random.nextInt(caminhos.size()));
     }
 
     private int cima(int celulas) {

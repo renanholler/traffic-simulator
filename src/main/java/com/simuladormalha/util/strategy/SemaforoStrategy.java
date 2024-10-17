@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class SemaforoStrategy implements ExclusaoMutuaStrategy {
-
     private Semaphore[][] semaforos;
 
     public SemaforoStrategy(MalhaViaria malha) {
@@ -23,7 +22,7 @@ public class SemaforoStrategy implements ExclusaoMutuaStrategy {
     }
 
     @Override
-    public synchronized boolean tentarReservar(List<Celula> caminho) {
+    public boolean tentarReservar(List<Celula> caminho) {
         for (Celula celula : caminho) {
             try {
                 if (!semaforos[celula.getLinha()][celula.getColuna()].tryAcquire()) {

@@ -40,9 +40,6 @@ public class Veiculo extends Thread {
                 }
 
                 moverVeiculo(proximoMovimento);
-//                if (exclusaoMutua.tentarReservar(new ArrayList<>(proximoMovimento))) {
-//                    exclusaoMutua.liberarCaminho(proximoMovimento);
-//                }
                 Thread.sleep(velocidade);
             }
         } catch (InterruptedException e) {

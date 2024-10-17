@@ -40,7 +40,10 @@ public class ControllerSimulacao {
         this.simulacaoAtiva = true;
 
         new Thread(() -> {
-            while (insercaoAtiva) {
+            while (simulacaoAtiva) {
+                if(!insercaoAtiva){
+                    continue;
+                }
                 if (veiculos.size() < maxVeiculos) {
                     Veiculo veiculo = veiculoFactory.criarVeiculo();
                     if(malha.getMalha()[veiculo.getLinhaAtual()][veiculo.getColunaAtual()].estaOcupada()) {
@@ -63,10 +66,6 @@ public class ControllerSimulacao {
 
     public void encerrarInsercao() {
         this.insercaoAtiva = false;
-    }
-
-    public void retornarInsercao() {
-        this.insercaoAtiva = true;
     }
 
     public void encerrarSimulacao() {

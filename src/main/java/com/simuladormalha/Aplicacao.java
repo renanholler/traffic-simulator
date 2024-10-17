@@ -8,7 +8,7 @@ public class Aplicacao {
 
     public static void main(String[] args) {
         try {
-            MalhaViaria malha = new MalhaViaria("/malhas/malha-exemplo-1.txt");
+            MalhaViaria malha = new MalhaViaria("/malhas/malha-exemplo-3.txt");
 
             ControllerSimulacao controlador = new ControllerSimulacao(malha, null);
 

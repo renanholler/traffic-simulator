@@ -29,7 +29,7 @@ public class InterfaceGrafica extends JFrame {
         painelMalha = new PainelMalha(malha);
 
         setTitle("Simulação de Veículos");
-        setSize(1000, 800);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -92,6 +92,7 @@ public class InterfaceGrafica extends JFrame {
                 encerrarSimulacao();
             }
         });
+        botaoEncerrarSimulacao.setEnabled(false);
 
         setVisible(true);
 
@@ -117,6 +118,7 @@ public class InterfaceGrafica extends JFrame {
             controlador.iniciarSimulacao(maxVeiculos, intervaloInsercao);
 
             botaoIniciar.setEnabled(false);
+            botaoEncerrarSimulacao.setEnabled(true);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Valores inválidos nos campos de entrada.", "Erro", JOptionPane.ERROR_MESSAGE);
         }

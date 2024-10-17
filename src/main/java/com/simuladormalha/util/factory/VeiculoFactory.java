@@ -22,7 +22,7 @@ public class VeiculoFactory {
     public Veiculo criarVeiculo() {
         List<Celula> entradas = malha.getPontosEntrada();
         Celula entrada = entradas.get(random.nextInt(entradas.size()));
-        int velocidade = 50 + random.nextInt(100);
+        int velocidade = 200 + random.nextInt(100);
 
         return new Veiculo(malha, entrada.getLinha(), entrada.getColuna(), velocidade, exclusaoMutua);
     }

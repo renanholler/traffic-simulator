@@ -75,6 +75,11 @@ public class ControllerSimulacao {
         for (Veiculo veiculo : veiculos) {
             veiculo.desativar();
         }
+        for(int i = 0; i < malha.getLinhas(); i++) {
+            for (int j = 0; j < malha.getColunas(); j++) {
+                malha.getCelula(i,j).setReservada(false);
+            }
+        }
         veiculos.clear();
     }
 }
